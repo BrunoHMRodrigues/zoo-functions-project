@@ -1,22 +1,36 @@
 const { species, employees } = require('../data/zoo_data');
 
+// function verifyIdName(employeParam) {
+//   if (employeParam.id) {
+//     return employees.find((employe) => (employeParam.id === employe.id));
+//   }
+//   if (employeParam.name) {
+//     const firstName = employees.find((employe) => (employeParam.name === employe.firstName));
+//     const lastName = employees.find((employe) => (employeParam.name === employe.lastName));
+//     if (firstName) {
+//       return firstName;
+//     }
+//     return lastName;
+// }
+
 function findEmploye(employeParam) {
   const verifyParam = employees
-    .some((eachEmploye) => (employeParam.id === eachEmploye.id || employeParam.name === eachEmploye.firstName || employeParam.name === eachEmploye.lastName));
+    .some((eachEmploye) => (
+      employeParam.id === eachEmploye.id || employeParam.name === eachEmploye.firstName
+        || employeParam.name === eachEmploye.lastName));
   if (verifyParam === false) {
     return false;
   }
-  // console.log(verifyParam);
   if (employeParam.id) {
     return employees.find((employe) => (employeParam.id === employe.id));
   }
   if (employeParam.name) {
     const firstName = employees.find((employe) => (employeParam.name === employe.firstName));
     const lastName = employees.find((employe) => (employeParam.name === employe.lastName));
-    if (firstName) {
-      return firstName;
-    }
-    return lastName;
+    // if (firstName) {
+    //   return firstName;
+    // }
+    return [firstName, lastName];
   }
 }
 // console.log(findEmploye({ name: 'Wishart'}));
@@ -58,9 +72,17 @@ function getEmployeesCoverage(employeParam) {
   }
   const getEmploye = findEmploye(employeParam);
   if (getEmploye === false) {
-    throw 'Informações inválidas';
+    throw new Error('Informações inválidas');
+  }
+  const firstName = getEmploye[0];
+  const lastName = getEmploye[1];
+  if (firstName) {
+    return creatResult(firstName);
+  }
+  if (lastName) {
+    return creatResult(lastName);
   }
   return creatResult(getEmploye);
 }
-// console.log(getEmployeesCoverage({ name: 'Wilburns' }));
+
 module.exports = getEmployeesCoverage;
