@@ -26,21 +26,29 @@ describe('Testes da função getOpeningHours', () => {
     expect(getOpeningHours('Tuesday', '10:00-PM')).toBe('The zoo is closed');
   });
 
-  // it('Confere comportamento quando sigla AM ou PM for errada', () => {
-  //  expect(getOpeningHours('Inválido', '10:00-AB')).toThrow('The abbreviation must be \'AM\' or \'PM\'');
-  // });
+  it('Confere comportamento quando sigla AM ou PM for errada', () => {
+    expect(() => getOpeningHours('Tuesday', '10:00-AB')).toThrow('The abbreviation must be \'AM\' or \'PM\'');
+  });
 
   it('Confere comportamento quando for recebido uma string ao invés de uma hora', () => {
-   expect(() => getOpeningHours('Tuesday', 'A0:00-AM')).toThrow('The hour should represent a number');
+    expect(() => getOpeningHours('Tuesday', 'A0:00-AM')).toThrow('The hour should represent a number');
   });
 
   it('Confere comportamento quando for recebido uma string ao invés dos minutos', () => {
     expect(() => getOpeningHours('Tuesday', '10:A0-AM')).toThrow('The minutes should represent a number');
-   });
+  });
 
-//   it('Confere comportamento quando for recebido um dia da semana equivocado', () => {
-//     expect(() => getOpeningHours('Thu', '10:00-AM')).toThrow('The day must be valid. Example: Monday');
-//   });
+  it('Confere comportamento quando for recebido um valor de hora fora do escopo', () => {
+    expect(() => getOpeningHours('Tuesday', '13:00-AM')).toThrow('The hour must be between 0 and 12');
+  });
+
+  it('Confere comportamento quando for recebido um valor de minutos fora do escopo', () => {
+    expect(() => getOpeningHours('Tuesday', '10:60-AM')).toThrow('The minutes must be between 0 and 59');
+  });
+
+  it('Confere comportamento quando for recebido um dia da semana equivocado', () => {
+    expect(() => getOpeningHours('Thu', '10:00-AM')).toThrow('The day must be valid. Example: Monday');
+  });
 
   it('Confere comportamento quando nenhum parâmetro for inserido', () => {
     expect(getOpeningHours()).toEqual(weekTable);
