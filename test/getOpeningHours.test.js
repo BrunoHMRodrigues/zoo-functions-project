@@ -21,9 +21,12 @@ const weekTable = {
 };
 
 describe('Testes da função getOpeningHours', () => {
+  const opened = 'The zoo is open';
+  const closed = 'The zoo is closed';
   it('Confere se pega horários de aberto e fechado', () => {
-    expect(getOpeningHours('Tuesday', '10:00-AM')).toBe('The zoo is open');
-    expect(getOpeningHours('Tuesday', '10:00-PM')).toBe('The zoo is closed');
+    expect(getOpeningHours('Tuesday', '10:00-AM')).toBe(opened);
+    expect(getOpeningHours('Wednesday', '10:00-PM')).toBe(closed);
+    expect(getOpeningHours('Monday', '10:00-AM')).toBe(closed);
   });
 
   it('Confere comportamento quando sigla AM ou PM for errada', () => {
