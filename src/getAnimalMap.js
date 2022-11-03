@@ -13,7 +13,7 @@ function getNames(region, sex, sorted) {
     .map((filteredAnimal) => filteredAnimal.name);
   let animalResidents = animalsRegion
     .map((specie) => species.filter((animal) => (animal.name === specie))
-      .map((element) => element.residents));
+      .map((element) => element.residents.map((resident) => resident.name)));
   if (sex && sorted) {
     animalResidents = animalsRegion
       .map((specie) => species.filter((animal) => (animal.name === specie))
@@ -23,7 +23,7 @@ function getNames(region, sex, sorted) {
   if (sex && !sorted) {
     animalResidents = animalsRegion
       .map((specie) => species.filter((animal) => (animal.name === specie))
-        .map((element) => element.residents.filter((resident) => (resident.sex === sex))));
+        .map((element) => element.residents.filter((resident) => (resident.sex === sex)).map((getName) => getName.name)));
   }
   if (!sex && sorted) {
     animalResidents = animalsRegion
@@ -32,9 +32,12 @@ function getNames(region, sex, sorted) {
   }
   const array = [];
   for (let index = 0; index < animalsRegion.length; index += 1) {
-    array[animalsRegion[index]] = animalResidents[index];
+    const animalData = animalResidents[index].reduce((resident) => resident);
+    const objAnimal = {
+      [animalsRegion[index]]: animalData,
+    };
+    array[index] = objAnimal;
   }
-  // const teste = animalsRegion.map((animal, index) => [animal] = animalResidents[index]);
   return array;
 }
 // console.log(getNames('NE', 'male', true));
@@ -45,14 +48,13 @@ function createAnimalsByName(sex, sorted) {
     const region = arrayRegions[index];
     obj[region] = getNames(region, sex, sorted);
   }
-  // str = JSON.stringify(obj, null, 4);
   return obj;
 }
 // console.log(createAnimalsByName());
 
 function createAnimalsNoName() {
   const arrayAnimalsRegions = {};
-  arrayRegions.forEach((region, index) => {
+  arrayRegions.forEach((region) => {
     const arrayAnimalsData = species.filter((animal) => (region === animal.location));
     arrayAnimalsRegions[region] = arrayAnimalsData.map((eachAnimal) => eachAnimal.name);
   });
@@ -60,36 +62,15 @@ function createAnimalsNoName() {
 }
 // console.log(createAnimalsNoName());
 
-// function addNames(objLocationAnimals) {
-
-// }
-// console.log(addNames(createKeys()));
-// function filterSex(region, sex) {
-//   const animalsRegion = species.filter((animal) => (animal.location === region))
-//     .map((filteredAnimal) => filteredAnimal.name);
-//   const animalResidents = animalsRegion
-//     .map((specie) => species.filter((animal) => (animal.name === specie))
-//       .map((element) => element.residents)).filter((resident) => (resident.sex === sex));
-//   const array = [];
-//   for (let index = 0; index < animalsRegion.length; index += 1) {
-//     array[animalsRegion[index]] = animalResidents[index];
-//   }
-//   // const teste = animalsRegion.map((animal, index) => [animal] = animalResidents[index]);
-//   return array;
-// }
-
 function getAnimalMap(options) {
   const animalLocationNoName = createAnimalsNoName();
   if (!options) { return animalLocationNoName; }
   const { includeNames, sex, sorted } = options;
   if (includeNames) {
     const animalLocationByName = createAnimalsByName(sex, sorted);
-    // if (!options.sorted && !options.sex) { return animalLocationByName; }
-    // if (options.sex) { return filterSex(region, sex); }
-    // if (options.sorted) { return sort(animalLocationByName); }
     return animalLocationByName;
   }
   return animalLocationNoName;
 }
-console.log(getAnimalMap({ includeNames: true, sex: 'female' }));
+console.log(getAnimalMap({ includeNames: true, sorted: true }));
 module.exports = getAnimalMap;
