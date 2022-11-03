@@ -6,30 +6,49 @@ const arrayRegions = [
   'SE',
   'SW',
 ];
+function onlySex(animalsRegion, sex) {
+  const animalResidents = animalsRegion
+    .map((specie) => species.filter((animal) => (animal.name === specie))
+      .map((element) => element.residents.filter((resident) => (resident.sex === sex))
+        .map((getName) => getName.name)));
+  return animalResidents;
+}
 
-// console.log(Object.keys(arrayRegions));
+function onlySorted(animalsRegion) {
+  const animalResidents = animalsRegion
+    .map((specie) => species.filter((animal) => (animal.name === specie))
+      .map((element) => element.residents.map((resident) => resident.name).sort()));
+  return animalResidents;
+}
+
+function sexAndSorted(animalsRegion, sex) {
+  const animalResidents = animalsRegion
+    .map((specie) => species.filter((animal) => (animal.name === specie))
+      .map((element) => element.residents.filter((resident) => (resident.sex === sex))
+        .map((elementToSort) => elementToSort.name).sort()));
+  return animalResidents;
+}
+
+function noSexNoSorted(animalsRegion) {
+  const animalResidents = animalsRegion
+    .map((specie) => species.filter((animal) => (animal.name === specie))
+      .map((element) => element.residents.map((resident) => resident.name)));
+  return animalResidents;
+}
+
+function verifyMethod(animalsRegion, sex, sorted) {
+  // let animalResidents = '';
+  // if (!sex && !sorted) { return noSexNoSorted(animalsRegion); }
+  if (sex && sorted) { return sexAndSorted(animalsRegion, sex); }
+  if (sex) { return onlySex(animalsRegion, sex); }
+  if (sorted) { return onlySorted(animalsRegion); }
+  return noSexNoSorted(animalsRegion);
+}
+
 function getNames(region, sex, sorted) {
   const animalsRegion = species.filter((animal) => (animal.location === region))
     .map((filteredAnimal) => filteredAnimal.name);
-  let animalResidents = animalsRegion
-    .map((specie) => species.filter((animal) => (animal.name === specie))
-      .map((element) => element.residents.map((resident) => resident.name)));
-  if (sex && sorted) {
-    animalResidents = animalsRegion
-      .map((specie) => species.filter((animal) => (animal.name === specie))
-        .map((element) => element.residents.filter((resident) => (resident.sex === sex))
-          .map((elementToSort) => elementToSort.name).sort()));
-  }
-  if (sex && !sorted) {
-    animalResidents = animalsRegion
-      .map((specie) => species.filter((animal) => (animal.name === specie))
-        .map((element) => element.residents.filter((resident) => (resident.sex === sex)).map((getName) => getName.name)));
-  }
-  if (!sex && sorted) {
-    animalResidents = animalsRegion
-      .map((specie) => species.filter((animal) => (animal.name === specie))
-        .map((element) => element.residents.map((resident) => resident.name).sort()));
-  }
+  const animalResidents = verifyMethod(animalsRegion, sex, sorted);
   const array = [];
   for (let index = 0; index < animalsRegion.length; index += 1) {
     const animalData = animalResidents[index].reduce((resident) => resident);
