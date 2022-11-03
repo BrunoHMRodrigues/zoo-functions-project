@@ -37,8 +37,6 @@ function noSexNoSorted(animalsRegion) {
 }
 
 function verifyMethod(animalsRegion, sex, sorted) {
-  // let animalResidents = '';
-  // if (!sex && !sorted) { return noSexNoSorted(animalsRegion); }
   if (sex && sorted) { return sexAndSorted(animalsRegion, sex); }
   if (sex) { return onlySex(animalsRegion, sex); }
   if (sorted) { return onlySorted(animalsRegion); }
@@ -59,7 +57,6 @@ function getNames(region, sex, sorted) {
   }
   return array;
 }
-// console.log(getNames('NE', 'male', true));
 
 function createAnimalsByName(sex, sorted) {
   const obj = {};
@@ -69,7 +66,6 @@ function createAnimalsByName(sex, sorted) {
   }
   return obj;
 }
-// console.log(createAnimalsByName());
 
 function createAnimalsNoName() {
   const arrayAnimalsRegions = {};
@@ -79,7 +75,6 @@ function createAnimalsNoName() {
   });
   return arrayAnimalsRegions;
 }
-// console.log(createAnimalsNoName());
 
 function getAnimalMap(options) {
   const animalLocationNoName = createAnimalsNoName();
@@ -91,5 +86,5 @@ function getAnimalMap(options) {
   }
   return animalLocationNoName;
 }
-console.log(getAnimalMap({ includeNames: true, sorted: true }));
+
 module.exports = getAnimalMap;
